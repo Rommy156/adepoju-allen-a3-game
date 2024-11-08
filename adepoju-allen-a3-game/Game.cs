@@ -1,5 +1,6 @@
 ﻿// Include code libraries you need below (use the namespace).
 
+using adepoju_allen_a3_game;
 using System;
 using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
@@ -15,21 +16,20 @@ namespace Game10003
     public class Game
     {
         // Place your variables here:
-        //lets creat variable to store input 
-        Vector2 input = new Vector2(400, 550);
+        public Vector2 position = new Vector2(Random.Float(0, 800), Window.Height);
         //circle radius
         float radius = 30f;
-        //lets store position
-        Vector2 position;
-        //lets store size
-        Vector2 size;
         //array of cars 
-        Cars[] randomCars = new Cars[100] ;
-        //car colors 
-        Color userColor = Color.White;
-        Color cpuColor = Color.Red;
+        public Vector2[] randomCars =
+        {
+            new (Random.Float(0,250),0),new (Random.Float(250,550)), new (Random.Float(550,800))
+        };
+        public npcCar[] npcCars = new npcCar[100];
+        
 
-        UserCar userCar = new UserCar();
+        userCar userCar = new userCar();
+        npcCar NpcCar = new npcCar();
+        FasterCars FasterCar = new FasterCars();
 
         /// <summary>
         ///     Setup runs once before the game loop begins.
@@ -39,12 +39,9 @@ namespace Game10003
             Window.SetSize(800, 600);
             Window.TargetFPS = 60;
            
-            for (int i = 0; i < randomCars.Length; i++)
-            {
-                // Initialize cars with random positions
-                randomCars[i] = new Cars(Random.Vector2() );
-            }
-            foreach (var car in randomCars) { Draw.Circle(30, 20, 20); }
+
+            FasterCar.Setup();
+            NpcCar.Setup();
         }
         /// <summary>
         ///     Update runs every frame.
@@ -52,53 +49,16 @@ namespace Game10003
         public void Update()
         {
             Window.ClearBackground(Color.Gray);
-        
             /*
             randomCars = new cars() += 100* Time.DeltaTime;
             */
             
-           
             //lets draw other cars on the road 
             
-
-
-
-            //lets store player input
-            void GetPlayerInput()
-            {   Draw.Circle(input,radius);
-                if (Input.IsKeyboardKeyDown(KeyboardInput.Left)) { input.X -= 17; }
-                if (Input.IsKeyboardKeyDown(KeyboardInput.Right)) input.X += 17;
-
-                if (Input.IsKeyboardKeyDown(KeyboardInput.Up)) { input.Y -= 17; }
-                if (Input.IsKeyboardKeyDown(KeyboardInput.Down)) { input.Y += 20; }
-            }
-            GetPlayerInput();
-
-            userCar = new UserCar();
+            NpcCar.Update();
+            FasterCar.Update();
+            userCar.Update();
           
-            position += input * 100 * Time.DeltaTime;
-            randomCars = new Cars[100];
- 
-            //lets set window collision
-            float playerLeftEdge = input.X;
-            float playerRightEdge = input.X + radius;
-            float playerTopEdge = input.Y;
-            float playerBottomEdge = input.Y + radius;
-
-            bool isLeftOfScreen = playerLeftEdge <= 30;
-            bool isRightOfScreen = playerRightEdge >= Window.Width;
-            bool isAboveWindow = playerTopEdge <= 30;
-            bool isBelowWindow = playerBottomEdge >= Window.Height;
-
-            if (isLeftOfScreen || isRightOfScreen || isBelowWindow || isAboveWindow)
-            {
-                if (isLeftOfScreen) { input.X = 0 + radius; }
-                if (isRightOfScreen) { input.X = Window.Width - radius; }
-                if (isAboveWindow) { input.Y = 0 + radius; }
-                if (isBelowWindow) { input.Y = Window.Height - radius; }
-                
-            
-            }
         }
     }
     

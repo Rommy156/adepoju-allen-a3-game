@@ -1,30 +1,64 @@
-﻿using Game10003;
-using System;
+﻿
+         using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Game10003
-{
-    public class UserCar
-    {//lets draw car
-        public void UserCarr()
-        {  
-            //circle radius
-            float radius = 30f;
-            //lets creat variable to store input 
-            Vector2 input = new Vector2(400, 550);
-        }
+{ //circle radius
 
+    public class userCar
+    {
+        public float radius = 30f;
+
+        Vector2 input = new Vector2(400, 550);
+        //lets store position
+        public Vector2 position = new Vector2(Random.Float(0, 800), Window.Height);
         public void Update()
         {
-            UserCarr();
-            Vector2 input;
-            float radius;
+            GetPlayerInput();
+            Collisions();
+            position += input * 50 * Time.DeltaTime;
         }
-         
+        //lets get player input and draw circle at position
+
+        //lets store player input
+        void GetPlayerInput()
+        {
+            Draw.FillColor = Color.Red;
+           
+            Draw.Circle(input, radius);
+            if (Input.IsKeyboardKeyDown(KeyboardInput.Left)) { input.X -= 17; }
+            if (Input.IsKeyboardKeyDown(KeyboardInput.Right)) input.X += 17;
+
+            if (Input.IsKeyboardKeyDown(KeyboardInput.Up)) { input.Y -= 17; }
+            if (Input.IsKeyboardKeyDown(KeyboardInput.Down)) { input.Y += 20; }
+        }
+        void Collisions()
+        {
+            //lets set window collision
+            float playerLeftEdge = input.X;
+            float playerRightEdge = input.X + radius;
+            float playerTopEdge = input.Y;
+            float playerBottomEdge = input.Y + radius;
+
+            bool isLeftOfScreen = playerLeftEdge <= 30;
+            bool isRightOfScreen = playerRightEdge >= Window.Width;
+            bool isAboveWindow = playerTopEdge <= 30;
+            bool isBelowWindow = playerBottomEdge >= Window.Height;
+
+            if (isLeftOfScreen || isRightOfScreen || isBelowWindow || isAboveWindow)
+            {
+                if (isLeftOfScreen) { input.X = 0 + radius; }
+                if (isRightOfScreen) { input.X = Window.Width - radius; }
+                if (isAboveWindow) { input.Y = 0 + radius; }
+                if (isBelowWindow) { input.Y = Window.Height - radius; }
+            }
+        }
     }
+
+
 }
+       
