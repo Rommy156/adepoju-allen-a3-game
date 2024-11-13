@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 namespace Game10003
 {
     public class npcCar
-    {   //lets store position
+    {   
+        //lets store position
         public Vector2 position = new Vector2(Random.Float(0, 800), 0);
         //define gravity
         public Vector2 gravity = new Vector2(0, +30);
