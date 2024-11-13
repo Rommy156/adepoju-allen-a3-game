@@ -22,10 +22,13 @@ namespace Game10003
         //array of cars 
         public Vector2[] randomCars =
         {
-            new (Random.Float(0,250),0),new (Random.Float(250,550)), new (Random.Float(550,800))
+            new (Random.Float(0,250)),
+            new (Random.Float(250,550)),
+            new (Random.Float(550,800))
         };
-        public npcCar[] npcCars = new npcCar[100];
-        
+        public npcCar[] npcCars;
+        public static bool End = false;
+        public static bool Win = false;
 
         userCar userCar = new userCar();
         npcCar NpcCar = new npcCar();
@@ -38,29 +41,67 @@ namespace Game10003
         {   //lets set up window size and fps
             Window.SetSize(800, 600);
             Window.TargetFPS = 60;
-           
 
+            SetupNpcCars();
             FasterCar.Setup();
             NpcCar.Setup();
         }
         /// <summary>
         ///     Update runs every frame.
         /// </summary>
-        public void Update()
+
+        private void SetupNpcCars()
         {
+            npcCars = new npcCar[10];
+            for (int i = 0; i < npcCars.Length; i++)
+            {
+                npcCars[i] = new npcCar();
+                npcCars[i].Setup();
+            }
+        }
+        public void Update()
+        {   //set background color
             Window.ClearBackground(Color.Gray);
-            /*
-            randomCars = new cars() += 100* Time.DeltaTime;
-            */
-            
-            //lets draw other cars on the road 
-            
+            //loop in the update
+            foreach (var car in npcCars) { car.Update(); }
+            if (position.Y > Window.Height)
+            {
+                position = new Vector2(Random.Float(0, Window.Width), 0);
+
+                { Draw.Circle(position, radius); }
+            }
+            //lets draw other cars on the road ;
+
             NpcCar.Update();
             FasterCar.Update();
             userCar.Update();
-          
+
+
+            //circle collision 
+            float circleRadii = userCar.radius + NpcCar.radius;
+            bool doCirclesColl = Vector2.Distance(userCar.position, NpcCar.position) <= circleRadii;
+            //game win/lose logic
+            if (doCirclesColl)
+            {
+                End = true;
+                if (doCirclesColl && position.X < Window.Width)
+                {
+                    {
+                        if (Game.Win)
+                        {
+                            Text.Draw($"YOU WON!", new Vector2(50, 50));
+                        }
+                        if (Game.End)
+                        {
+                            Text.Draw($"YOU LOSE!", new Vector2(50, 50));
+                        }
+                    }
+
+                }
+            }
         }
     }
-    
-    
 }
+    
+    
+

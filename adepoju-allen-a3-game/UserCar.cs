@@ -10,10 +10,9 @@ namespace Game10003
 { //circle radius
 
     public class userCar
-    {
+    {   //lets set raius for circlw
         public float radius = 30f;
-
-        Vector2 input = new Vector2(400, 550);
+        Vector2 input = new Vector2(400, 500);
         //lets store position
         public Vector2 position = new Vector2(Random.Float(0, 800), Window.Height);
         public void Update()
@@ -28,17 +27,16 @@ namespace Game10003
         void GetPlayerInput()
         {
             Draw.FillColor = Color.Red;
-           
             Draw.Circle(input, radius);
             if (Input.IsKeyboardKeyDown(KeyboardInput.Left)) { input.X -= 17; }
             if (Input.IsKeyboardKeyDown(KeyboardInput.Right)) input.X += 17;
-
+            /*
             if (Input.IsKeyboardKeyDown(KeyboardInput.Up)) { input.Y -= 17; }
-            if (Input.IsKeyboardKeyDown(KeyboardInput.Down)) { input.Y += 20; }
+            if (Input.IsKeyboardKeyDown(KeyboardInput.Down)) { input.Y += 20; }*/
         }
+            //lets set window collision
         void Collisions()
         {
-            //lets set window collision
             float playerLeftEdge = input.X;
             float playerRightEdge = input.X + radius;
             float playerTopEdge = input.Y;
